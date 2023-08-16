@@ -1,4 +1,4 @@
-# BRACu CSE111
+# BracU CSE111
 
 Programming Language Course - II
 (Obeject Oriented Programming in Python)
