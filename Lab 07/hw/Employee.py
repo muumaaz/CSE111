@@ -1,7 +1,7 @@
 import datetime
 
 class Employee:
-    total_employee = 0
+    #total_employee = 0
     employee_count = {"Programmer": 0, "HR": 0}
 
     def __init__(self, name, joining_date, work_experience, weekly_work_hour = 40):
@@ -11,14 +11,19 @@ class Employee:
         self.work_experience = work_experience
         if weekly_work_hour > 60:
             print("Weekly work hour cannot be more than 60 hours")
-            self.weekly_work_hour = weekly_work_hour
+            self.weekly_work_hour = 40
+        elif weekly_work_hour < 40:
+            print(f"{self.name} can not work for {weekly_work_hour} hours")
+            self.weekly_work_hour = 40
         else:
             self.weekly_work_hour = weekly_work_hour
 
     @classmethod
     def showDetails(cls):
         print("Company Workforce:")
-        print(f"Total Employee/s: {cls.total_employee}")
+        total = cls.employee_count["Programmer"] + cls.employee_count["HR"]
+        print(f"Total Employee/s: {total}")
+        
         if cls.employee_count["Programmer"] > 0:
             print(f"Total Programmer/s: {cls.employee_count['Programmer']}")
         if cls.employee_count["HR"] > 0:
@@ -33,7 +38,7 @@ class Programmer(Employee):
     def __init__(self, name, joining_date, work_experience, weekly_work_hour=40):
         super().__init__(name, joining_date, work_experience, weekly_work_hour)
         super().employee_count["Programmer"] += 1
-        Employee.total_employee += 1
+        #Employee.total_employee += 1
         self.id = self.createProgrammerId()
         self.designation = self.createDesignation()
         self.period = datetime.datetime.now().year - int(self.year)
@@ -68,30 +73,32 @@ class Programmer(Employee):
             self.bonus = (self.weekly_work_hour - 40) * 4 * 500
             print(f"{self.name} will get BDT {self.bonus} overtime.")
             self.salary += self.bonus
+        else:
+            print(f"{self.name} will not get any overtime.")
             
 
 class HR(Employee):
     def __init__(self, name, joining_date, work_experience, weekly_work_hour):
         super().__init__(name, joining_date, work_experience, weekly_work_hour)
         super().employee_count["HR"] += 1
-        Employee.total_employee += 1
+        #Employee.total_employee += 1
         self.id = self.createHREmployeeID()
 
-    def showHREmployeeDeatails(self):
+    def showHREmployeeDetails(self):
         print("HR Employee: ")
         print(f"Name: {self.name}")
         print(f"ID: {self.id}")
         print(f"Joining Date: {self.day}-{self.month}-{self.year}")
     
     def createHREmployeeID(self):
-        return f"HR-{self.year}{self.month}-{Employee.employee_count}"
+        return f"HR-{self.year}{self.month}-{self.employee_count['HR']}"
 
 class InternProgrammer(Programmer):
     intern_count = 0
 
     def __init__(self, name, joining_date, intern_type = "Unpaid"):
         super().__init__(name, joining_date, work_experience = 0, weekly_work_hour = 40)
-        
+        Programmer.employee_count["Programmer"] -= 1
         InternProgrammer.intern_count += 1
         self.temp_id = self.createInternId()
         self.intern_type = intern_type
@@ -149,7 +156,7 @@ richard.showProgrammerDetails()
 print("=========5=========")
 monica = HR("Monica Hall", "2022-07-06", 2, 40)
 print("=========6=========")
-monica.showHREmployeeDeatails()
+monica.showHREmployeeDetails()
 print("=========7=========")
 Employee.showDetails()
 print("=========8=========")
@@ -164,6 +171,7 @@ gavin = Programmer("Gavin Belson", "2016-12-20", 9)
 gavin.calculateSalary()
 gavin.calculateOvertime()
 gavin.showProgrammerDetails()
+Employee.showDetails()
 print("=========12=========")
 yang = InternProgrammer("Jian Yang", "2023-01-01")
 yang.showInternDetails()
