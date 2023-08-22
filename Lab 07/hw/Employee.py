@@ -71,16 +71,14 @@ class Programmer(Employee):
             
 
 class HR(Employee):
-    def __init__(self, name, joining_date, work_experience, weekly_work_hour = 40):
+    def __init__(self, name, joining_date, work_experience, weekly_work_hour):
         super().__init__(name, joining_date, work_experience, weekly_work_hour)
         super().employee_count["HR"] += 1
         Employee.total_employee += 1
-        self.id = self.createHREmployeeId()
-        self.designation = self.createDesignation()
-        self.period = datetime.datetime.now().year - int(self.year)
+        self.id = self.createHREmployeeID()
 
     def showHREmployeeDeatails(self):
-        print("HR Employee")
+        print("HR Employee: ")
         print(f"Name: {self.name}")
         print(f"ID: {self.id}")
         print(f"Joining Date: {self.day}-{self.month}-{self.year}")
@@ -88,16 +86,54 @@ class HR(Employee):
     def createHREmployeeID(self):
         return f"HR-{self.year}{self.month}-{Employee.employee_count}"
 
-    def createDesignation(self):
-        if self.work_experience < 3:
-            return "Junior HR Executive"
-        elif self.work_experience < 5:
-            return "HR Executive"
-        elif self.work_experience < 8:
-            return "Senior HR Executive"
-        else:
-            return "HR Manager"
+class InternProgrammer(Programmer):
+    intern_count = 0
 
+    def __init__(self, name, joining_date, intern_type = "Unpaid"):
+        super().__init__(name, joining_date, work_experience = 0, weekly_work_hour = 40)
+        
+        InternProgrammer.intern_count += 1
+        self.temp_id = self.createInternId()
+        self.intern_type = intern_type
+        self.status = self.checkStatus()
+
+    
+    def createInternId(self):
+        return f"Temp_{InternProgrammer.intern_count}"
+
+    def checkStatus(self):
+        # months_in_company = datetime.datetime.now().year - int(self.year) * 12 + datetime.datetime.now().month - int(self.month)
+        # if int(self.day) > 1:
+        #     months_in_company -= 1
+        # if months_in_company > 4:
+        #     if int(self.month) in [1, 7]:
+        #         status = "Eligible for promotion"
+        #     else:
+        #         status = "Not eligible for promotion"
+        
+        # return status
+        if datetime.datetime.now().month - int(self.month) > 4 and int(self.month) in [1, 7]:
+            return "Eligible for promotion"
+        else:
+            return "Not eligible for promotion"
+        
+    
+    def showInternDetails(self):
+        print("Intern (Programmer):")
+        print(f"Name: {self.name}")
+        print(f"ID: {self.temp_id}")
+        print(f"Joining Date: {self.year}-{self.month}-{self.day}")
+        print(f"Internship Type: {self.intern_type}")
+        print(f"Status: {self.status}")
+
+    def promoteToProgrammer(self):
+        if self.status == "Eligible for promotion":
+            InternProgrammer.intern_count -= 1
+            print(f"{self.name} is promoted!")
+            self.joining_date = datetime.datetime.now().strftime("%Y-%m-%d")
+            return Programmer(self.name, self.joining_date, 0, 40)
+        else:
+            print(f"{self.name} cannot be promoted.")
 
 
 Employee.showDetails()
@@ -129,3 +165,18 @@ gavin.calculateSalary()
 gavin.calculateOvertime()
 gavin.showProgrammerDetails()
 print("=========12=========")
+yang = InternProgrammer("Jian Yang", "2023-01-01")
+yang.showInternDetails()
+print("=========13=========")
+jared = InternProgrammer("Jared Dunn", "2023-06-05", "Paid")
+jared.showInternDetails()
+print("=========14=========")
+jared = jared.promoteToProgrammer()
+print("=========15=========")
+Employee.showDetails()
+print("=========16=========")
+yang = yang.promoteToProgrammer()
+yang.calculateSalary()
+yang.showProgrammerDetails()
+print("=========17=========")
+Employee.showDetails()
