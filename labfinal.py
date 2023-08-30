@@ -23,8 +23,8 @@ class StudentTutor(Instructor):
         self.com_cred = com_cred
         self.id = id
         Instructor.no_of_STs += 1
-        Instructor.instructor_database[self.stid] = self.name
-        Instructor.no_of_students_taught += self.no_of_students_taught
+        Instructor.instructor_database[f"ST{Instructor.no_of_STs}"] = {'No_of_students_taught' : f"{Instructor.no_of_students_taught}", 'Courses_taught' : len(self.courses_taught)}
+        
 
     def instruct(self):
         print(f"I am assisting {self.no_of_students_taught} students in {len(self.courses_taught)} course(s)")
@@ -34,20 +34,26 @@ class StudentTutor(Instructor):
         return f"Name: {self.name} \nRole: {self.role} \nNo. of students taught: {self.no_of_students_taught} \nST ID: {self.stid} \nStudent ID: {self.id} \nCredits Completed: {self.com_cred} \nCourses taught:{self.courses_taught}"
 
     def attend_lectures(self):
-        pass
+        print(f"I have already completed {self.com_cred} credits. I am attending lectures to complete my degree.")
 
 class Teacher(Instructor):
-    def __init__(self):
-        pass
+    def __init__(self, name, no_of_students_taught, chair, *courses):
+        super().__init__(name, no_of_students_taught, *courses)
+        self.role = "Teacher"
+        self.designation = chair
+        Instructor.no_of_teachers += 1
+        Instructor.instructor_database[f"T{Instructor.no_of_teachers}"] = {'No_of_students_taught' : f"{Instructor.no_of_students_taught}", 'Courses_taught' : len(self.courses_taught)}
+        
 
     def instruct(self):
-        pass
+        print(f"I am teaching {len(self.courses_taught)} course(s) to {self.no_of_students_taught} students")
 
     def details(self):
-        pass
+        return f"Name: {self.name} \nRole: {self.role} \nNo. of students taught: {self.no_of_students_taught} \nDesignation: {self.designation} \nCourses taught:{self.courses_taught}"
+
 
     def check_copies(self):
-        pass    
+        print(f"Checking copies of {self.no_of_students_taught} students")    
 
 
 
@@ -85,4 +91,6 @@ print("---------------------------")
 print(ST2.details())
 print("---------------------------")
 ST2.attend_lectures()
+print("---------------------------")
+print("Instructor database:", Instructor.instructor_database)
 print("---------------------------")
