@@ -23,7 +23,7 @@ class StudentTutor(Instructor):
         self.com_cred = com_cred
         self.id = id
         Instructor.no_of_STs += 1
-        Instructor.instructor_database[f"ST{Instructor.no_of_STs}"] = {'No_of_students_taught' : f"{Instructor.no_of_students_taught}", 'Courses_taught' : len(self.courses_taught)}
+        Instructor.instructor_database[f"ST{Instructor.no_of_STs}"] = {'No_of_students_taught' : f"{self.no_of_students_taught}", 'Courses_taught' : len(self.courses_taught)}
         
 
     def instruct(self):
@@ -42,7 +42,7 @@ class Teacher(Instructor):
         self.role = "Teacher"
         self.designation = chair
         Instructor.no_of_teachers += 1
-        Instructor.instructor_database[f"T{Instructor.no_of_teachers}"] = {'No_of_students_taught' : f"{Instructor.no_of_students_taught}", 'Courses_taught' : len(self.courses_taught)}
+        Instructor.instructor_database[f"T{Instructor.no_of_teachers}"] = {'No_of_students_taught' : f"{self.no_of_students_taught}", 'Courses_taught' : len(self.courses_taught)}
         
 
     def instruct(self):
