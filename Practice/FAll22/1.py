@@ -1,22 +1,19 @@
 class Netflix: 
-    total = 0
-    lst = []
+    shows = []
     def __init__(self, name, genre, episode = 10):
         self.name = name
-        self.genre = ', '.join(i for i in genre)
+        self.genre = genre
         self.episode = episode
-        Netflix.total += 1
-        Netflix.lst.append(self.name)
-
+        Netflix.shows.append(self.name)
 
     def __str__(self):
-        return f"Show Name: {self.name} \nEpisode: {self.episode} \nGenre: {self.genre}"
+        return f"Show Name: {self.name} \nEpisode: {self.episode} \nGenre: {', '.join(self.genre)}"
 
     @classmethod
     def printDetails(cls):
-        print(f"Total Number of shows: {Netflix.total}")
-        for i in Netflix.lst:
-            print(i)
+        print(f"Total Number of shows: {len(Netflix.shows)}")
+        print('\n'.join(Netflix.shows))
+
     
 s1 = Netflix("Wednesday",["Mystery","Supernatural"],15)
 print("==========1==========")
